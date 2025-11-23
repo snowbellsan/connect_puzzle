@@ -28,37 +28,20 @@
             align-items: center;
             justify-content: flex-start; /* 上部に寄せつつ、中央に配置 */
             padding-top: 20px; /* 上部に少しマージン */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            background-size: 400% 400%;
-            animation: gradient-shift 15s ease infinite;
+            
+            /* 【修正点1】背景のアニメーションと複雑なグラデーションを削除 */
+            background: #2a0050; /* 深い青紫の単色 */
             color: #ffffff;
             font-family: 'Fredoka One', Arial, sans-serif;
             user-select: none;
             -webkit-user-select: none;
+            
+            /* 【修正点2】シンプルな単色の輝きエフェクトを追加 (optional) */
+            box-shadow: inset 0 0 100px rgba(138, 43, 226, 0.5); 
         }
 
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .particle {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: float 3s infinite;
-            z-index: 1;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
+        /* 【修正点3】パーティクル関連のCSSを削除 */
+        /* @keyframes gradient-shift, .particle, @keyframes float は削除 */
 
         h1 {
             font-size: 3em;
@@ -86,7 +69,8 @@
             
             border: 5px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
-            background: rgba(0, 0, 0, 0.3);
+            /* 背景の透明度を維持しつつ、単色背景に合うよう調整 */
+            background: rgba(0, 0, 0, 0.4); 
             backdrop-filter: blur(10px);
             padding: 10px;
             box-shadow: 0 0 50px rgba(255, 255, 255, 0.2),
@@ -360,7 +344,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+            /* 背景のグラデーションを固定のグラデーションに変更 */
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95)); 
             color: white;
             display: none;
             flex-direction: column;
@@ -436,25 +421,20 @@
     <div id="game-container">
         <h1>コネクトパズル</h1>
         
-        <!-- ボードと情報パネルを横並びにするラッパー -->
         <div class="main-game-area">
             <div id="game-board"></div>
             
-            <!-- 情報パネル (PCでは縦長、スマホでは横長) -->
             <div id="game-info">
-                <!-- 時間 -->
                 <div class="info-panel" id="time-panel">
                     <p>⏰ のこり時間</p>
                     <span id="timer">60</span>
                 </div>
                 
-                <!-- スコア -->
                 <div class="info-panel" id="score-panel">
                     <p>💎 スコア</p>
                     <span id="score">0</span>
                 </div>
 
-                <!-- コンボ -->
                 <div class="info-panel" id="combo-panel">
                     <p>🔥 連鎖</p>
                     <span id="combo">0</span>
@@ -469,30 +449,17 @@
         </div>
     </div>
 
-    <!-- BGMと効果音用のオーディオ要素 -->
-    <!-- これらの音声ファイルのURLがアクセス可能であることを前提としています -->
     <audio id="bgm" loop src="assets/The_Seasons_Go_Around.mp3"></audio>
     <audio id="tap-sound" src="assets/ファニージャンプ.mp3"></audio>
     <audio id="vanish-sound" src="assets/レトロアクション.mp3"></audio>
 
     <script>
-        // 背景パーティクルの生成 (既存コード)
-        for (let i = 0; i < 20; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + '%';
-            p.style.animationDelay = Math.random() * 3 + 's';
-            p.style.animationDuration = (Math.random() * 2 + 2) + 's';
-            document.body.appendChild(p);
-        }
-
         // --- 音声関連の初期設定 ---
         const bgm = document.getElementById('bgm');
         const tapSound = document.getElementById('tap-sound');
         const vanishSound = document.getElementById('vanish-sound');
 
         // BGMを再生する関数
-        // ユーザーの最初の操作後に実行する必要がある
         function startBGM() {
             if (bgm.paused) {
                 bgm.volume = 0.3; // BGMの音量を調整
@@ -526,7 +493,7 @@
         const SCORE = document.getElementById('score');
         const TIMER = document.getElementById('timer');
         const COMBO = document.getElementById('combo');
-        const COMBO_PANEL = document.getElementById('combo-panel'); // 新しいパネル要素を取得
+        const COMBO_PANEL = document.getElementById('combo-panel'); 
         const FINAL = document.getElementById('final-score');
 
         let grid = [], path = [], dragging = false, score = 0, time = 60, combo = 0, interval, processing = false;
@@ -548,10 +515,10 @@
             TIMER.textContent = time;
             COMBO.textContent = combo;
             
-            // コンボパネルのハイライト処理を修正
+            // コンボパネルのハイライト処理
             if (combo > 0) {
-                COMBO_PANEL.classList.add('combo-active');
-                // 既にハイライトが適用されている場合は、アニメーションをリセットして再度実行
+                // 既にクラスがある場合はアニメーションをリセットして再度実行
+                COMBO_PANEL.classList.remove('combo-active'); 
                 void COMBO_PANEL.offsetWidth; // 強制リフローでアニメーションをリセット
                 COMBO_PANEL.classList.add('combo-active');
             } else {
@@ -598,7 +565,9 @@
                         idx++;
                     } else if (col) {
                         const nb = make(r, c, col);
+                        // 新しく生成されるボールは画面外から登場
                         nb.style.gridRowStart = r - ROWS;
+                        // CSSトランジションを使って落下させる
                         setTimeout(() => nb.style.gridRowStart = r + 1, 50);
                     }
                 }
@@ -623,7 +592,6 @@
 
         function start(e) {
             if (processing || time <= 0) return;
-            // BGMがまだ始まっていなければ、最初のクリック/タッチで開始（二重のリスナー防止のため、startBGM関数は一度しか実行されないように設定済み）
             startBGM();
             
             const t = e.target.closest('.ball');
@@ -646,6 +614,14 @@
         function stop() {
             if (!dragging) return;
             dragging = false;
+            
+            // 虹色ボール単体タップ（最小接続数未満）
+            if (path.length === 1 && path[0].col === RAINBOW_COLOR_ID) {
+                rainbow(path[0].r, path[0].c);
+                return;
+            }
+
+            // 最小接続数以上のパス
             if (path.length >= MIN_CONNECT) {
                 clear();
                 processing = true;
@@ -653,8 +629,6 @@
                 score += path.length * 10;
                 update();
                 vanish(balls).then(() => chain());
-            } else if (path.length === 1 && path[0].col === RAINBOW_COLOR_ID) {
-                rainbow(path[0].r, path[0].c);
             } else {
                 clear();
             }
@@ -674,7 +648,7 @@
             if (!last) {
                 path.push({ r, c, col, el });
                 el.classList.add('highlight');
-                playTapSound(); // ボールをパスに追加したときに音を鳴らす
+                playTapSound(); 
                 return;
             }
 
@@ -693,7 +667,7 @@
             if (same) {
                 path.push({ r, c, col, el });
                 el.classList.add('highlight');
-                playTapSound(); // ボールをパスに追加したときに音を鳴らす
+                playTapSound(); 
             }
         }
 
@@ -702,6 +676,7 @@
             combo = 0;
             clear();
             const balls = [];
+            // 3x3の範囲を検索
             for (let r = cr - 1; r <= cr + 1; r++) {
                 for (let c = cc - 1; c <= cc + 1; c++) {
                     if (r >= 0 && r < ROWS && c >= 0 && c < COLS && grid[r][c]) {
@@ -718,11 +693,12 @@
         }
 
         function vanish(balls) {
-            playVanishSound(); // ボールが消えるときに音を鳴らす
+            playVanishSound(); 
             return new Promise(res => {
                 balls.forEach(p => {
                     p.el.classList.add('vanishing');
-                    grid[p.r][p.c] = 0;
+                    // gridから削除（0にする）
+                    grid[p.r][p.c] = 0; 
                 });
                 setTimeout(() => {
                     balls.forEach(p => p.el.remove());
@@ -739,31 +715,33 @@
         function loop() {
             gravity();
             fill();
-            repos();
+            // ボールの位置を更新・落下アニメーション
+            repos(); 
+            
             setTimeout(() => {
                 const found = findChains();
                 if (found.length > 0) {
                     combo++;
                     score += found.length * 50 * combo;
                     update();
-                    playVanishSound(); // 連鎖でボールが消えるときにも音を鳴らす
+                    playVanishSound(); 
                     vanish(found).then(() => loop());
                 } else {
                     combo = 0;
                     processing = false;
                     update();
                 }
-            }, 550);
+            }, 550); // 落下アニメーションが終わるのを待つ
         }
 
         function gravity() {
             for (let c = 0; c < COLS; c++) {
-                let w = ROWS - 1;
+                let w = ROWS - 1; // 書き込み位置
                 for (let r = ROWS - 1; r >= 0; r--) {
                     if (grid[r][c]) {
                         if (r !== w) {
                             grid[w][c] = grid[r][c];
-                            grid[r][c] = 0;
+                            grid[r][c] = 0; // 元の位置は空にする
                         }
                         w--;
                     }
@@ -774,17 +752,20 @@
         function fill() {
             for (let c = 0; c < COLS; c++) {
                 for (let r = 0; r < ROWS; r++) {
+                    // grid[r][c]が0（空）の場合、新しいボールを生成
                     if (!grid[r][c]) {
                         grid[r][c] = Math.random() < 0.03 ? RAINBOW_COLOR_ID : Math.floor(Math.random() * COLOR_COUNT) + 1;
                     }
                 }
             }
         }
-
+        
+        // 縦・横・斜めの4つ以上の連鎖を検出する関数
         function findChains() {
             const result = [];
             const seen = new Set();
             
+            // 縦方向の連鎖
             for (let c = 0; c < COLS; c++) {
                 for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
                     const col = grid[r][c];
@@ -793,18 +774,19 @@
                     for (let i = r; i < ROWS && grid[i][c] === col; i++) len++;
                     if (len >= MIN_CONNECT) {
                         for (let i = 0; i < len; i++) {
-                            const k = `${r + i},${c}`;
+                            const currentR = r + i;
+                            const k = `${currentR},${c}`;
                             if (!seen.has(k)) {
-                                const el = document.querySelector(`.ball[data-row="${r + i}"][data-col="${c}"]`);
-                                if (el) result.push({r: r + i, c, el});
+                                const el = document.querySelector(`.ball[data-row="${currentR}"][data-col="${c}"]`);
+                                if (el) result.push({r: currentR, c, el});
                                 seen.add(k);
-                                grid[r + i][c] = 0;
                             }
                         }
                     }
                 }
             }
 
+            // 横方向の連鎖
             for (let r = 0; r < ROWS; r++) {
                 for (let c = 0; c <= COLS - MIN_CONNECT; c++) {
                     const col = grid[r][c];
@@ -813,18 +795,19 @@
                     for (let i = c; i < COLS && grid[r][i] === col; i++) len++;
                     if (len >= MIN_CONNECT) {
                         for (let i = 0; i < len; i++) {
-                            const k = `${r},${c + i}`;
+                            const currentC = c + i;
+                            const k = `${r},${currentC}`;
                             if (!seen.has(k)) {
-                                const el = document.querySelector(`.ball[data-row="${r}"][data-col="${c + i}"]`);
-                                if (el) result.push({r, c: c + i, el});
+                                const el = document.querySelector(`.ball[data-row="${r}"][data-col="${currentC}"]`);
+                                if (el) result.push({r, c: currentC, el});
                                 seen.add(k);
-                                grid[r][c + i] = 0;
                             }
                         }
                     }
                 }
             }
 
+            // 右下がり斜め ( \ ) の連鎖
             for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
                 for (let c = 0; c <= COLS - MIN_CONNECT; c++) {
                     const col = grid[r][c];
@@ -833,18 +816,20 @@
                     for (let i = 0; r + i < ROWS && c + i < COLS && grid[r + i][c + i] === col; i++) len++;
                     if (len >= MIN_CONNECT) {
                         for (let i = 0; i < len; i++) {
-                            const k = `${r + i},${c + i}`;
+                            const currentR = r + i;
+                            const currentC = c + i;
+                            const k = `${currentR},${currentC}`;
                             if (!seen.has(k)) {
-                                const el = document.querySelector(`.ball[data-row="${r + i}"][data-col="${c + i}"]`);
-                                if (el) result.push({r: r + i, c: c + i, el});
+                                const el = document.querySelector(`.ball[data-row="${currentR}"][data-col="${currentC}"]`);
+                                if (el) result.push({r: currentR, c: currentC, el});
                                 seen.add(k);
-                                grid[r + i][c + i] = 0;
                             }
                         }
                     }
                 }
             }
 
+            // 右上がり斜め ( / ) の連鎖
             for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
                 for (let c = MIN_CONNECT - 1; c < COLS; c++) {
                     const col = grid[r][c];
@@ -853,23 +838,30 @@
                     for (let i = 0; r + i < ROWS && c - i >= 0 && grid[r + i][c - i] === col; i++) len++;
                     if (len >= MIN_CONNECT) {
                         for (let i = 0; i < len; i++) {
-                            const k = `${r + i},${c - i}`;
+                            const currentR = r + i;
+                            const currentC = c - i;
+                            const k = `${currentR},${currentC}`;
                             if (!seen.has(k)) {
-                                const el = document.querySelector(`.ball[data-row="${r + i}"][data-col="${c - i}"]`);
-                                if (el) result.push({r: r + i, c: c - i, el});
+                                const el = document.querySelector(`.ball[data-row="${currentR}"][data-col="${currentC}"]`);
+                                if (el) result.push({r: currentR, c: currentC, el});
                                 seen.add(k);
-                                grid[r + i][c - i] = 0;
                             }
                         }
                     }
                 }
             }
             
+            // 検出されたボールをgrid上から削除する（vanishと二重にならないよう注意）
+            // 自動連鎖検出では、処理を簡略化するため、ここで見つかったボールをgridから削除（0にする）
+            // gravity関数で空いたマスを詰める処理が機能するようにする
+            result.forEach(p => {
+                grid[p.r][p.c] = 0; 
+            });
+
             return result;
         }
 
         init();
     </script>
 </body>
-
 </html>
