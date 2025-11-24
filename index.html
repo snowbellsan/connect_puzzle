@@ -2,141 +2,38 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>コネクトパズルゲーム</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
-        
-        /* 1. HTMLとBODYに高さを設定して、モバイルのビューポートに対応 */
-        html, body {
-            height: 100%; /* 全画面高さを確保 */
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* スクロールを禁止 */
-            touch-action: none;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* 上部に寄せつつ、中央に配置 */
-            padding-top: 20px; /* 上部に少しマージン */
-            
-            /* 【修正点1】背景のアニメーションと複雑なグラデーションを削除 */
-            background: #2a0050; /* 深い青紫の単色 */
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #000033 0%, #000055 100%);
             color: #ffffff;
-            font-family: 'Fredoka One', Arial, sans-serif;
+            font-family: Arial, sans-serif;
             user-select: none;
             -webkit-user-select: none;
-            
-            /* 【修正点2】シンプルな単色の輝きエフェクトを追加 (optional) */
-            box-shadow: inset 0 0 100px rgba(138, 43, 226, 0.5); 
-        }
-
-        /* 【修正点3】パーティクル関連のCSSを削除 */
-        /* @keyframes gradient-shift, .particle, @keyframes float は削除 */
-
-        h1 {
-            font-size: 3em;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
-                         0 0 40px rgba(255, 100, 255, 0.6),
-                         0 5px 10px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-            animation: title-pulse 2s ease-in-out infinite;
-            letter-spacing: 3px;
-            z-index: 10;
-            position: relative;
-        }
-
-        @keyframes title-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
 
         #game-container {
-            /* 2. 最大高さをビューポートの95%に制限 */
-            display: flex;
-            flex-direction: column; 
-            align-items: center;
-            max-height: 95vh; 
-            
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            /* 背景の透明度を維持しつつ、単色背景に合うよう調整 */
-            background: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(10px);
-            padding: 10px;
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2),
-                        0 0 100px rgba(138, 43, 226, 0.4),
-                        inset 0 0 50px rgba(255, 255, 255, 0.05);
-            position: relative;
-            z-index: 10;
-            width: 95%; 
-            max-width: 500px;
-        }
-        
-        .main-game-area {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            justify-content: center;
-            /* ボードと情報パネルのグループがコンテナ内で最大の高さを占める */
-            flex-grow: 1; 
-            min-height: 0; /* flexアイテムのオーバーフロー防止 */
-        }
-
-        /* PC/タブレット向けのレイアウト (768px以上) */
-        #game-info {
-            /* PC向け：縦長のインフォメーションパネル */
-            width: 140px; 
-            height: 500px; /* 固定高さを維持 */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 10px 0;
-            font-size: 1em;
-            
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        .info-panel {
-            text-align: center;
-            padding: 15px 5px;
-            margin: 0 10px;
+            border: 5px solid #0056b3;
             border-radius: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-        
-        .info-panel p {
-            font-size: 1.2em; /* ラベルをPC版でさらに大きく */
-            opacity: 0.9;
-            margin-bottom: 5px;
-            font-weight: bold;
+            background-color: #001144;
+            padding: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            touch-action: none;
         }
 
-        .info-panel span {
-            font-size: 2.2em;
-            font-weight: bold;
-            color: #ffff00;
-            text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
-            display: block;
-        }
-        
-        #combo-panel {
-             border: 2px solid #ff44aa;
+        h1 {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1.8em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         #game-board {
@@ -147,194 +44,131 @@
             height: 500px;
             position: relative;
             overflow: hidden;
-            background: rgba(0, 0, 50, 0.5);
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 15px;
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5),
-                        0 0 30px rgba(138, 43, 226, 0.3);
+            background-color: #001f66;
+            border: 2px solid #0056b3;
+            touch-action: none;
         }
-        
-        /* ------------------------------------- */
-        /* スマートフォン向けレスポンシブ対応 (767px以下) */
-        /* ------------------------------------- */
-        @media (max-width: 767px) {
-            h1 {
-                font-size: 2em; /* タイトルをさらに小さく */
-                margin-bottom: 10px;
-            }
 
-            #game-container {
-                padding: 5px; /* パディングを減らす */
-                max-width: 98%;
-                /* 画面の高さに応じて調整可能な高さを設定 */
-                height: calc(100% - 20px); /* bodyのpaddingを除いた残りの高さを利用 */
-            }
-
-            .main-game-area {
-                flex-direction: column;
-                gap: 5px; /* 縦の隙間を減らす */
-                max-height: 100%;
-            }
-
-            #game-board {
-                width: 100%;
-                max-width: 95vw; /* ビューポート幅の95%を上限に */
-                /* 高さを親コンテナ（main-game-area）の残りのスペースに合わせて柔軟に調整 */
-                flex-grow: 1; 
-                min-height: 300px; /* 最小高さを設定 */
-                
-                /* アスペクト比6:10を柔軟に保つための調整 */
-                /* calc(width / 6 * 10) の計算はCSSでは難しいので、flex-growで高さを確保 */
-                /* ボードの幅を確定させ、高さをその比率に合わせる */
-                width: min(calc(98vh - 120px) * 0.6, 95vw); /* 高さから情報パネルなどを引いた幅の6/10、または95vwの小さい方 */
-                height: min(calc(98vh - 120px), 95vw / 6 * 10);
-            }
-            
-            /* ボードを中央揃えにするための微調整 */
-            #game-board {
-                align-self: center;
-                margin-bottom: 5px;
-            }
-
-            #game-info {
-                /* スマホ向け：ボードの下に横長のパネルとして再定義 */
-                width: 100%;
-                max-width: 400px; /* 横長パネルの最大幅 */
-                height: auto;
-                flex-direction: row; 
-                justify-content: space-between; 
-                gap: 5px;
-                padding: 5px;
-                /* 高さ固定 */
-                min-height: 60px; 
-            }
-
-            .info-panel {
-                width: 32%; /* 均等3分割に近くなるよう調整 */
-                margin: 0;
-                padding: 5px 2px; /* パディングをさらに減らす */
-            }
-            
-            .info-panel p {
-                font-size: 0.8em; /* ラベルをさらに小さくして収める */
-                margin-bottom: 2px; /* マージンも減らす */
-                line-height: 1.1; /* 行の高さを詰める */
-            }
-
-            .info-panel span {
-                font-size: 1.5em; /* 数字も小さくして収める */
-            }
+        #game-info {
+            width: 300px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1em;
+            padding: 0 5px;
         }
-        /* 以下、ボールとアニメーションのスタイルは変更なし */
+
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        #controls button {
+            flex: 1;
+            padding: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #0056b3;
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        #controls button:hover {
+            background-color: #003d82;
+        }
+
+        #controls button:active {
+            transform: scale(0.95);
+        }
 
         .ball {
-            width: 85%;
-            height: 85%;
+            width: 80%;
+            height: 80%;
             border-radius: 50%;
             margin: auto;
             position: relative;
             z-index: 10;
             cursor: pointer;
-            transition: grid-row-start 0.5s ease-out, transform 0.3s ease-out;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5),
-                        inset 0 2px 5px rgba(255, 255, 255, 0.3);
-            border: 3px solid rgba(255, 255, 255, 0.4);
-            filter: brightness(1.1);
+            transition: grid-row-start 0.5s ease-out, transform 0.5s ease-out;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
 
-        .ball::before {
-            content: '';
-            position: absolute;
-            top: 15%;
-            left: 20%;
-            width: 30%;
-            height: 30%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
-            border-radius: 50%;
-        }
-
-        .color-1 { 
-            background: radial-gradient(circle at 30% 30%, #ff6666, #ff0000, #cc0000);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.6),
-                        inset 0 2px 5px rgba(255, 255, 255, 0.3),
-                        0 0 20px rgba(255, 0, 0, 0.4);
-        }
-        
-        .color-2 { 
-            background: radial-gradient(circle at 30% 30%, #6666ff, #0000ff, #0000cc);
-            box-shadow: 0 5px 15px rgba(0, 0, 255, 0.6),
-                        inset 0 2px 5px rgba(255, 255, 255, 0.3),
-                        0 0 20px rgba(0, 0, 255, 0.4);
-        }
-        
-        .color-3 { 
-            background: radial-gradient(circle at 30% 30%, #66ff66, #00ff00, #00cc00);
-            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.6),
-                        inset 0 2px 5px rgba(255, 255, 255, 0.3),
-                        0 0 20px rgba(0, 255, 0, 0.4);
-        }
-        
-        .color-4 { 
-            background: radial-gradient(circle at 30% 30%, #ffff66, #ffff00, #cccc00);
-            box-shadow: 0 5px 15px rgba(255, 255, 0, 0.6),
-                        inset 0 2px 5px rgba(255, 255, 255, 0.3),
-                        0 0 20px rgba(255, 255, 0, 0.4);
-        }
-        
+        .color-1 { background-color: #ff3333; }
+        .color-2 { background-color: #3333ff; }
+        .color-3 { background-color: #33ff33; }
+        .color-4 { background-color: #ffff33; }
         .color-5 { 
-            background: linear-gradient(45deg, 
-                #ff0000 0%, #ff8000 14%, #ffff00 28%, 
-                #00ff00 42%, #0000ff 57%, #8a2be2 71%, 
-                #ff0000 85%, #ff8000 100%);
-            background-size: 200% 200%;
-            animation: rainbow-shift 3s linear infinite;
-            border: 4px solid #ffffff;
-            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.8),
-                        inset 0 2px 5px rgba(255, 255, 255, 0.5),
-                        0 0 30px rgba(138, 43, 226, 0.6);
-        }
-
-        @keyframes rainbow-shift {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
+            background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #00ff00, #0000ff, #8a2be2);
+            border: 3px solid #ffffff;
+        } 
 
         .ball.highlight {
-            box-shadow: 0 0 30px 8px rgba(255, 255, 255, 1),
-                        0 0 60px 15px currentColor,
-                        0 5px 15px rgba(0, 0, 0, 0.5);
-            transform: scale(1.2) rotate(5deg);
-            filter: brightness(1.5);
-            animation: highlight-pulse 0.3s ease-in-out infinite;
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8), 0 3px 6px rgba(0, 0, 0, 0.5);
+            transform: scale(1.1);
             z-index: 20;
-        }
-
-        @keyframes highlight-pulse {
-            0%, 100% { transform: scale(1.2) rotate(5deg); }
-            50% { transform: scale(1.25) rotate(-5deg); }
         }
         
         .ball.vanishing {
-            animation: vanish-explosion 0.6s forwards;
+            animation: vanish-animation 0.4s forwards;
             pointer-events: none;
         }
 
-        @keyframes vanish-explosion {
-            0% { 
-                transform: scale(1) rotate(0deg); 
-                opacity: 1; 
-                filter: brightness(1);
+        @keyframes vanish-animation {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.1); opacity: 0; }
+        }
+
+        .floating-score {
+            position: absolute;
+            color: #ffff00;
+            font-weight: bold;
+            font-size: 1.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            pointer-events: none;
+            z-index: 50;
+            animation: float-up 1s ease-out forwards;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
             }
-            50% { 
-                transform: scale(1.5) rotate(180deg); 
-                opacity: 0.8; 
-                filter: brightness(2) blur(2px);
-                box-shadow: 0 0 50px 20px currentColor;
-            }
-            100% { 
-                transform: scale(0) rotate(360deg); 
+            100% {
+                transform: translateY(-50px) scale(1.2);
                 opacity: 0;
-                filter: brightness(3) blur(5px);
+            }
+        }
+
+        .combo-text {
+            position: absolute;
+            color: #ff00ff;
+            font-weight: bold;
+            font-size: 2em;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            pointer-events: none;
+            z-index: 60;
+            transform: translate(-50%, -50%);
+            animation: combo-pulse 1.5s ease-out forwards;
+        }
+
+        @keyframes combo-pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.3);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
             }
         }
 
@@ -344,8 +178,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* 背景のグラデーションを固定のグラデーションに変更 */
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95)); 
+            background-color: rgba(0, 0, 0, 0.9);
             color: white;
             display: none;
             flex-direction: column;
@@ -353,515 +186,742 @@
             align-items: center;
             z-index: 100;
             text-align: center;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+            border-radius: 10px;
         }
 
         #overlay.active {
             display: flex;
-            animation: overlay-appear 0.5s ease-out;
-        }
-
-        @keyframes overlay-appear {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         #overlay h2 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
-                         0 5px 10px rgba(0, 0, 0, 0.5);
-            animation: title-pulse 2s ease-in-out infinite;
+            margin: 10px 0;
+            font-size: 2em;
         }
 
         #overlay p {
-            font-size: 2em;
-            margin-bottom: 20px;
+            font-size: 1.3em;
+            margin: 10px 0;
         }
 
         #overlay button {
-            padding: 15px 40px;
+            padding: 15px 30px;
             margin-top: 20px;
-            font-size: 1.5em;
-            font-family: 'Fredoka One', Arial, sans-serif;
+            font-size: 1.3em;
             cursor: pointer;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 5px;
+            background-color: #0056b3;
             color: white;
-            border: 3px solid white;
-            border-radius: 50px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3),
-                        0 0 20px rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
+            transition: background-color 0.2s;
         }
 
         #overlay button:hover {
-            transform: scale(1.1) rotate(-2deg);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4),
-                        0 0 40px rgba(255, 255, 255, 0.5);
+            background-color: #003d82;
         }
 
-        #overlay button:active {
-            transform: scale(0.95);
-        }
-
-        @keyframes combo-pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.4); color: #ff00ff; }
-            100% { transform: scale(1); }
-        }
-
-        .combo-active {
-            animation: combo-pop 0.5s ease-out;
-            box-shadow: 0 0 20px 5px #ff00ff;
+        .high-score-display {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #ffcc00;
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <h1>コネクトパズル</h1>
+        <h1>🎮 コネクトパズル</h1>
         
-        <div class="main-game-area">
-            <div id="game-board"></div>
-            
-            <div id="game-info">
-                <div class="info-panel" id="time-panel">
-                    <p>⏰ のこり時間</p>
-                    <span id="timer">60</span>
-                </div>
-                
-                <div class="info-panel" id="score-panel">
-                    <p>💎 スコア</p>
-                    <span id="score">0</span>
-                </div>
+        <div class="high-score-display">ハイスコア: <span id="high-score">0</span></div>
+        
+        <div id="game-info">
+            <p>⏱️ <span id="timer">60</span>秒</p>
+            <p>🎯 <span id="score">0</span></p>
+            <p>🔥 <span id="combo">0</span>連鎖</p>
+        </div>
 
-                <div class="info-panel" id="combo-panel">
-                    <p>🔥 連鎖</p>
-                    <span id="combo">0</span>
-                </div>
-            </div>
+        <div id="game-board"></div>
+        
+        <div id="controls">
+            <button id="pause-btn">ポーズ</button>
+            <button id="sound-toggle">🔊</button>
         </div>
         
         <div id="overlay">
-            <h2>🎮 ゲームオーバー 🎮</h2>
+            <h2>🎉 時間切れ</h2>
             <p>最終スコア: <span id="final-score">0</span></p>
-            <button onclick="window.location.reload()">もう一度プレイ 🎯</button>
+            <button onclick="window.location.reload()">もう一度プレイ</button>
         </div>
     </div>
-
-    <audio id="bgm" loop src="assets/The_Seasons_Go_Around.mp3"></audio>
-    <audio id="tap-sound" src="assets/ファニージャンプ.mp3"></audio>
-    <audio id="vanish-sound" src="assets/レトロアクション.mp3"></audio>
-
+    
+    <audio id="bgm" src="assets/The_Seasons_Go_Around.mp3" loop></audio>
+    <audio id="se_vanish" src="assets/レトロアクション.mp3"></audio> 
+    <audio id="se_path" src="assets/ファニージャンプ.mp3"></audio>
+    
     <script>
-        // --- 音声関連の初期設定 ---
-        const bgm = document.getElementById('bgm');
-        const tapSound = document.getElementById('tap-sound');
-        const vanishSound = document.getElementById('vanish-sound');
+// ===============================================================
+// Puyo Quest Style Connect Puzzle Game - game.js (改善版)
+// ===============================================================
 
-        // BGMを再生する関数
-        function startBGM() {
-            if (bgm.paused) {
-                bgm.volume = 0.3; // BGMの音量を調整
-                bgm.play().catch(e => console.log('BGM再生エラー:', e));
+// --- A. 定数と初期化 ---
+
+const COLS = 6;
+const ROWS = 10;
+const COLOR_COUNT = 4;
+const RAINBOW_COLOR_ID = 5;
+const MIN_CONNECT = 4; // 4つ以上で消える
+
+// DOM要素
+const BOARD_ELEMENT = document.getElementById('game-board');
+const SCORE_ELEMENT = document.getElementById('score');
+const TIMER_ELEMENT = document.getElementById('timer');
+const COMBO_ELEMENT = document.getElementById('combo');
+const FINAL_SCORE_ELEMENT = document.getElementById('final-score');
+const OVERLAY_ELEMENT = document.getElementById('overlay');
+const HIGH_SCORE_ELEMENT = document.getElementById('high-score');
+const PAUSE_BUTTON = document.getElementById('pause-btn');
+const SOUND_TOGGLE = document.getElementById('sound-toggle');
+
+// オーディオ要素
+const BGM_ELEMENT = document.getElementById('bgm');
+const VANISH_SOUND_ELEMENT = document.getElementById('se_vanish');
+const PATH_SOUND_ELEMENT = document.getElementById('se_path');
+
+// ゲーム状態変数
+let gameGrid = [];
+let ballElementMap = {}; // 位置→要素のマップ (パフォーマンス改善)
+let selectedPath = [];
+let isDragging = false;
+let score = 0;
+let highScore = 0;
+let timeRemaining = 60;
+let comboCount = 0;
+let gameInterval;
+let isProcessing = false;
+let isPaused = false;
+let soundEnabled = true;
+let isBGMPlaying = false;
+
+// --- ゲーム開始とユーティリティ ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadHighScore();
+    initializeGame();
+    setupPauseButton();
+    setupSoundToggle();
+});
+
+function initializeGame() {
+    score = 0;
+    timeRemaining = 60;
+    comboCount = 0;
+    isProcessing = false;
+    isDragging = false;
+    isPaused = false;
+    
+    // BGMの準備
+    isBGMPlaying = false;
+    if (BGM_ELEMENT) {
+        BGM_ELEMENT.muted = true;
+        BGM_ELEMENT.volume = 0.4;
+    }
+    
+    gameGrid = [];
+    ballElementMap = {};
+    
+    for (let r = 0; r < ROWS; r++) {
+        gameGrid[r] = [];
+        for (let c = 0; c < COLS; c++) {
+            gameGrid[r][c] = getRandomColor(true); // 初期配置でも虹色を1%で出現
+        }
+    }
+    
+    initialRender();
+    setupEventListeners();
+    startGameTimer();
+    updateDisplay();
+}
+
+function updateDisplay() {
+    SCORE_ELEMENT.textContent = score;
+    TIMER_ELEMENT.textContent = timeRemaining;
+    COMBO_ELEMENT.textContent = comboCount;
+    if (HIGH_SCORE_ELEMENT) HIGH_SCORE_ELEMENT.textContent = highScore;
+}
+
+function getRandomColor(allowRainbow = true) {
+    // 初期配置では1%、通常は3%の確率で虹色
+    const rainbowChance = allowRainbow ? 0.01 : 0;
+    if (Math.random() < rainbowChance) { 
+        return RAINBOW_COLOR_ID;
+    }
+    return Math.floor(Math.random() * COLOR_COUNT) + 1;
+}
+
+function getRandomColorForRefill() {
+    // リフィル時は3%で虹色
+    if (Math.random() < 0.03) { 
+        return RAINBOW_COLOR_ID;
+    }
+    return Math.floor(Math.random() * COLOR_COUNT) + 1;
+}
+
+// 初回描画時にボールを配置する
+function initialRender() {
+    BOARD_ELEMENT.querySelectorAll('.ball').forEach(ball => ball.remove());
+    ballElementMap = {};
+    
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            if (gameGrid[r][c] !== 0) {
+                const ball = createBallElement(r, c, gameGrid[r][c]);
+                ball.style.gridRowStart = r + 1;
             }
+        }
+    }
+}
+
+function createBallElement(r, c, colorId) {
+    const ball = document.createElement('div');
+    ball.classList.add('ball', `color-${colorId}`);
+    
+    ball.dataset.row = r;
+    ball.dataset.col = c;
+    ball.dataset.color = colorId;
+
+    ball.style.gridColumnStart = c + 1;
+    
+    BOARD_ELEMENT.appendChild(ball);
+    ballElementMap[`${r},${c}`] = ball; // マップに登録
+    return ball;
+}
+
+// 描画最適化ロジック：既存のDOM要素を移動させ、新しいボールを追加する
+function updateBallPositions() {
+    const fragment = document.createDocumentFragment();
+    const newBalls = [];
+    
+    for (let c = 0; c < COLS; c++) {
+        const existingBallsInCol = Array.from(
+            BOARD_ELEMENT.querySelectorAll(`.ball[data-col="${c}"]`)
+        ).sort((a, b) => parseInt(a.dataset.row) - parseInt(b.dataset.row));
+
+        let existingIndex = 0;
+
+        for (let r = 0; r < ROWS; r++) {
+            const colorId = gameGrid[r][c];
+
+            if (existingIndex < existingBallsInCol.length) {
+                const ball = existingBallsInCol[existingIndex];
+                
+                ball.dataset.row = r;
+                ball.dataset.color = colorId;
+                ball.className = `ball color-${colorId}`; 
+                
+                // バッチ更新のため一時的に値を保存
+                newBalls.push({ball, row: r});
+                ballElementMap[`${r},${c}`] = ball;
+
+                existingIndex++;
+            } 
+            else if (colorId !== 0) {
+                const newBall = createBallElement(r, c, colorId);
+                newBall.style.gridRowStart = r - ROWS;
+                fragment.appendChild(newBall);
+                newBalls.push({ball: newBall, row: r, isNew: true});
+            }
+        }
+    }
+    
+    // 新しいボールを一括追加
+    if (fragment.hasChildNodes()) {
+        BOARD_ELEMENT.appendChild(fragment);
+    }
+    
+    // リフロー最小化：gridRowStartを一括更新
+    requestAnimationFrame(() => {
+        newBalls.forEach(({ball, row, isNew}) => {
+            ball.style.gridRowStart = row + 1;
+        });
+    });
+}
+
+function startGameTimer() {
+    if (gameInterval) clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+        if (!isPaused && timeRemaining > 0 && !isProcessing) {
+            timeRemaining--;
+            updateDisplay();
+        } else if (timeRemaining <= 0 && !isProcessing) {
+            clearInterval(gameInterval);
+            gameOver();
+        }
+    }, 1000);
+}
+
+function gameOver() {
+    isProcessing = true;
+    FINAL_SCORE_ELEMENT.textContent = score;
+    
+    // ハイスコア更新
+    if (score > highScore) {
+        highScore = score;
+        saveHighScore();
+    }
+    
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.add('active');
+    
+    // BGMを停止
+    if (BGM_ELEMENT) {
+        BGM_ELEMENT.pause();
+        isBGMPlaying = false;
+    }
+}
+
+// ハイスコア管理
+function loadHighScore() {
+    const saved = localStorage.getItem('puyoquest_highscore');
+    highScore = saved ? parseInt(saved) : 0;
+}
+
+function saveHighScore() {
+    localStorage.setItem('puyoquest_highscore', highScore);
+}
+
+// ポーズ機能
+function setupPauseButton() {
+    if (PAUSE_BUTTON) {
+        PAUSE_BUTTON.addEventListener('click', togglePause);
+    }
+}
+
+function togglePause() {
+    if (timeRemaining <= 0 || isProcessing) return;
+    
+    isPaused = !isPaused;
+    if (PAUSE_BUTTON) {
+        PAUSE_BUTTON.textContent = isPaused ? '再開' : 'ポーズ';
+    }
+    
+    // BGMの一時停止/再開
+    if (isPaused && BGM_ELEMENT && !BGM_ELEMENT.paused) {
+        BGM_ELEMENT.pause();
+    } else if (!isPaused && isBGMPlaying && BGM_ELEMENT && soundEnabled) {
+        BGM_ELEMENT.play().catch(e => {});
+    }
+}
+
+// サウンドトグル
+function setupSoundToggle() {
+    if (SOUND_TOGGLE) {
+        SOUND_TOGGLE.addEventListener('click', toggleSound);
+        updateSoundButton();
+    }
+}
+
+function toggleSound() {
+    soundEnabled = !soundEnabled;
+    updateSoundButton();
+    
+    // BGMの制御
+    if (BGM_ELEMENT) {
+        if (soundEnabled && isBGMPlaying && !isPaused) {
+            BGM_ELEMENT.volume = 0.4;
+            BGM_ELEMENT.play().catch(e => {});
+        } else {
+            BGM_ELEMENT.pause();
+        }
+    }
+}
+
+function updateSoundButton() {
+    if (SOUND_TOGGLE) {
+        SOUND_TOGGLE.textContent = soundEnabled ? '🔊' : '🔇';
+    }
+}
+
+// --- B. 操作（コンパクト）ロジック ---
+
+function setupEventListeners() {
+    BOARD_ELEMENT.addEventListener('mousedown', startDrag);
+    BOARD_ELEMENT.addEventListener('touchstart', startDrag, { passive: true });
+    
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', endDrag);
+    BOARD_ELEMENT.addEventListener('touchmove', drag, { passive: false });
+    BOARD_ELEMENT.addEventListener('touchend', endDrag);
+}
+
+function startDrag(e) {
+    if (isProcessing || timeRemaining <= 0 || isPaused) return;
+    
+    // BGM初回再生ロジック
+    if (!isBGMPlaying && BGM_ELEMENT && soundEnabled) {
+        BGM_ELEMENT.muted = false;
+        BGM_ELEMENT.volume = 0.4;
+        BGM_ELEMENT.play().catch(error => {
+            console.log("BGMの再生に失敗しました:", error);
+        });
+        isBGMPlaying = true;
+    }
+
+    const targetElement = e.target.closest('.ball');
+    if (!targetElement) return;
+    
+    // パス開始音
+    if (PATH_SOUND_ELEMENT && soundEnabled) {
+        PATH_SOUND_ELEMENT.currentTime = 0;
+        PATH_SOUND_ELEMENT.volume = 0.5;
+        PATH_SOUND_ELEMENT.play().catch(error => {});
+    }
+
+    isDragging = true;
+    selectedPath = [];
+    comboCount = 0;
+    addBallToPath(targetElement);
+}
+
+function drag(e) {
+    if (!isDragging || isPaused) return;
+    if (e.cancelable) e.preventDefault();
+    
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    const targetElement = document.elementFromPoint(clientX, clientY);
+
+    if (targetElement && targetElement.classList.contains('ball')) {
+        addBallToPath(targetElement);
+    }
+}
+
+function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    
+    if (selectedPath.length >= MIN_CONNECT) {
+        processConnect(selectedPath);
+    } 
+    else if (selectedPath.length === 1 && selectedPath[0].color === RAINBOW_COLOR_ID) {
+        processRainbowTap(selectedPath[0].r, selectedPath[0].c);
+    } 
+    else {
+        clearHighlight();
+    }
+    
+    selectedPath = [];
+}
+
+function clearHighlight() {
+    BOARD_ELEMENT.querySelectorAll('.ball').forEach(ball => {
+        ball.classList.remove('highlight');
+    });
+}
+
+function addBallToPath(ballElement) {
+    const r = parseInt(ballElement.dataset.row);
+    const c = parseInt(ballElement.dataset.col);
+    const color = parseInt(ballElement.dataset.color);
+    const last = selectedPath[selectedPath.length - 1];
+    
+    if (!last) {
+        selectedPath.push({ r, c, color, element: ballElement });
+        ballElement.classList.add('highlight');
+        return;
+    }
+
+    const existingIndex = selectedPath.findIndex(p => p.r === r && p.c === c);
+    if (existingIndex !== -1) {
+        if (existingIndex === selectedPath.length - 2) {
+            selectedPath.pop().element.classList.remove('highlight');
+        }
+        return;
+    }
+
+    // 8方向の隣接判定
+    const isAdjacent = Math.abs(r - last.r) <= 1 && Math.abs(c - last.c) <= 1;
+    if (!isAdjacent) return;
+
+    const pathColor = selectedPath[0].color;
+    const isSameColor = (color === pathColor) || (color === RAINBOW_COLOR_ID) || (pathColor === RAINBOW_COLOR_ID);
+
+    if (isSameColor) {
+        // パス延長音
+        if (PATH_SOUND_ELEMENT && soundEnabled) {
+            PATH_SOUND_ELEMENT.currentTime = 0;
+            PATH_SOUND_ELEMENT.volume = 0.5;
+            PATH_SOUND_ELEMENT.play().catch(error => {});
         }
         
-        // ボールタップ/スライド時の効果音を再生する関数
-        function playTapSound() {
-            // 効果音がすぐに再生できるように、再生時間をリセット
-            tapSound.currentTime = 0;
-            tapSound.volume = 0.5;
-            tapSound.play().catch(e => console.log('Tap Sound再生エラー:', e));
-        }
+        selectedPath.push({ r, c, color, element: ballElement });
+        ballElement.classList.add('highlight');
+    }
+}
 
-        // ボール消失時の効果音を再生する関数
-        function playVanishSound() {
-            // 効果音がすぐに再生できるように、再生時間をリセット
-            vanishSound.currentTime = 0;
-            vanishSound.volume = 0.7;
-            vanishSound.play().catch(e => console.log('Vanish Sound再生エラー:', e));
-        }
+// --- C. 消去、落下、連鎖ロジック (コア) ---
 
-        // ユーザー操作を検出してBGMを開始
-        document.addEventListener('mousedown', startBGM, { once: true });
-        document.addEventListener('touchstart', startBGM, { once: true });
-        // --- 音声関連の初期設定 終了 ---
+function processConnect(path) {
+    clearHighlight();
+    isProcessing = true;
 
-        const COLS = 6, ROWS = 10, COLOR_COUNT = 4, RAINBOW_COLOR_ID = 5, MIN_CONNECT = 4;
-        const BOARD = document.getElementById('game-board');
-        const SCORE = document.getElementById('score');
-        const TIMER = document.getElementById('timer');
-        const COMBO = document.getElementById('combo');
-        const COMBO_PANEL = document.getElementById('combo-panel'); 
-        const FINAL = document.getElementById('final-score');
+    const ballsToVanish = path.map(p => ({r: p.r, c: p.c, element: p.element}));
 
-        let grid = [], path = [], dragging = false, score = 0, time = 60, combo = 0, interval, processing = false;
+    const baseScore = path.length * 10;
+    score += baseScore;
+    showFloatingScore(baseScore, path[0].element);
+    updateDisplay();
 
-        function init() {
-            score = 0; time = 60; combo = 0; processing = false; dragging = false;
-            grid = Array(ROWS).fill().map(() => Array(COLS).fill().map(() => Math.floor(Math.random() * COLOR_COUNT) + 1));
-            render();
-            setup();
-            interval = setInterval(() => {
-                if (time > 0 && !processing) { time--; update(); }
-                else if (time <= 0) { clearInterval(interval); end(); }
-            }, 1000);
-            update();
-        }
+    vanishBalls(ballsToVanish).then(() => {
+        startGravityAndChain();
+    });
+}
 
-        function update() {
-            SCORE.textContent = score;
-            TIMER.textContent = time;
-            COMBO.textContent = combo;
-            
-            // コンボパネルのハイライト処理
-            if (combo > 0) {
-                // 既にクラスがある場合はアニメーションをリセットして再度実行
-                COMBO_PANEL.classList.remove('combo-active'); 
-                void COMBO_PANEL.offsetWidth; // 強制リフローでアニメーションをリセット
-                COMBO_PANEL.classList.add('combo-active');
-            } else {
-                COMBO_PANEL.classList.remove('combo-active');
-            }
-        }
-
-        function render() {
-            BOARD.querySelectorAll('.ball').forEach(b => b.remove());
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c < COLS; c++) {
-                    if (grid[r][c]) {
-                        const b = make(r, c, grid[r][c]);
-                        b.style.gridRowStart = r + 1;
-                    }
+// 虹色ボール処理：3x3の塊を消去する
+function processRainbowTap(centerR, centerC) {
+    isProcessing = true;
+    comboCount = 0;
+    clearHighlight();
+    
+    const ballsToVanish = [];
+    for (let r = centerR - 1; r <= centerR + 1; r++) {
+        for (let c = centerC - 1; c <= centerC + 1; c++) {
+            if (r >= 0 && r < ROWS && c >= 0 && c < COLS && gameGrid[r][c] !== 0) {
+                const element = ballElementMap[`${r},${c}`];
+                if (element) {
+                     ballsToVanish.push({r, c, element});
+                     score += 20; 
                 }
             }
         }
+    }
+    updateDisplay();
 
-        function make(r, c, col) {
-            const b = document.createElement('div');
-            b.className = `ball color-${col}`;
-            b.dataset.row = r;
-            b.dataset.col = c;
-            b.dataset.color = col;
-            b.style.gridColumnStart = c + 1;
-            BOARD.appendChild(b);
-            return b;
-        }
+    vanishBalls(ballsToVanish).then(() => {
+        startGravityAndChain();
+    });
+}
 
-        function repos() {
-            for (let c = 0; c < COLS; c++) {
-                const balls = Array.from(BOARD.querySelectorAll(`.ball[data-col="${c}"]`))
-                    .sort((a, b) => parseInt(a.dataset.row) - parseInt(b.dataset.row));
-                let idx = 0;
-                for (let r = 0; r < ROWS; r++) {
-                    const col = grid[r][c];
-                    if (idx < balls.length) {
-                        const b = balls[idx];
-                        b.dataset.row = r;
-                        b.style.gridRowStart = r + 1;
-                        b.className = `ball color-${col}`;
-                        b.dataset.color = col;
-                        idx++;
-                    } else if (col) {
-                        const nb = make(r, c, col);
-                        // 新しく生成されるボールは画面外から登場
-                        nb.style.gridRowStart = r - ROWS;
-                        // CSSトランジションを使って落下させる
-                        setTimeout(() => nb.style.gridRowStart = r + 1, 50);
-                    }
-                }
-            }
-        }
-
-        function end() {
-            processing = true;
-            FINAL.textContent = score;
-            document.getElementById('overlay').classList.add('active');
-            bgm.pause(); // ゲームオーバー時にBGMを停止
-        }
-
-        function setup() {
-            BOARD.addEventListener('mousedown', start);
-            BOARD.addEventListener('touchstart', start, { passive: true });
-            document.addEventListener('mousemove', move);
-            document.addEventListener('mouseup', stop);
-            BOARD.addEventListener('touchmove', move, { passive: false });
-            document.addEventListener('touchend', stop);
-        }
-
-        function start(e) {
-            if (processing || time <= 0) return;
-            startBGM();
-            
-            const t = e.target.closest('.ball');
-            if (!t) return;
-            dragging = true;
-            path = [];
-            combo = 0;
-            add(t);
-        }
-
-        function move(e) {
-            if (!dragging) return;
-            if (e.cancelable) e.preventDefault();
-            const x = e.touches ? e.touches[0].clientX : e.clientX;
-            const y = e.touches ? e.touches[0].clientY : e.clientY;
-            const t = document.elementFromPoint(x, y);
-            if (t && t.classList.contains('ball')) add(t);
-        }
-
-        function stop() {
-            if (!dragging) return;
-            dragging = false;
-            
-            // 虹色ボール単体タップ（最小接続数未満）
-            if (path.length === 1 && path[0].col === RAINBOW_COLOR_ID) {
-                rainbow(path[0].r, path[0].c);
-                return;
-            }
-
-            // 最小接続数以上のパス
-            if (path.length >= MIN_CONNECT) {
-                clear();
-                processing = true;
-                const balls = path.map(p => ({r: p.r, c: p.c, el: p.el}));
-                score += path.length * 10;
-                update();
-                vanish(balls).then(() => chain());
-            } else {
-                clear();
-            }
-            path = [];
-        }
-
-        function clear() {
-            BOARD.querySelectorAll('.ball').forEach(b => b.classList.remove('highlight'));
-        }
-
-        function add(el) {
-            const r = parseInt(el.dataset.row);
-            const c = parseInt(el.dataset.col);
-            const col = parseInt(el.dataset.color);
-            const last = path[path.length - 1];
-            
-            if (!last) {
-                path.push({ r, c, col, el });
-                el.classList.add('highlight');
-                playTapSound(); 
-                return;
-            }
-
-            const idx = path.findIndex(p => p.r === r && p.c === c);
-            if (idx !== -1) {
-                if (idx === path.length - 2) path.pop().el.classList.remove('highlight');
-                return;
-            }
-
-            const adj = Math.abs(r - last.r) <= 1 && Math.abs(c - last.c) <= 1;
-            if (!adj) return;
-
-            const pc = path[0].col;
-            const same = (col === pc) || (col === RAINBOW_COLOR_ID) || (pc === RAINBOW_COLOR_ID);
-
-            if (same) {
-                path.push({ r, c, col, el });
-                el.classList.add('highlight');
-                playTapSound(); 
-            }
-        }
-
-        function rainbow(cr, cc) {
-            processing = true;
-            combo = 0;
-            clear();
-            const balls = [];
-            // 3x3の範囲を検索
-            for (let r = cr - 1; r <= cr + 1; r++) {
-                for (let c = cc - 1; c <= cc + 1; c++) {
-                    if (r >= 0 && r < ROWS && c >= 0 && c < COLS && grid[r][c]) {
-                        const el = document.querySelector(`.ball[data-row="${r}"][data-col="${c}"]`);
-                        if (el) {
-                            balls.push({r, c, el});
-                            score += 20;
-                        }
-                    }
-                }
-            }
-            update();
-            vanish(balls).then(() => chain());
-        }
-
-        function vanish(balls) {
-            playVanishSound(); 
-            return new Promise(res => {
-                balls.forEach(p => {
-                    p.el.classList.add('vanishing');
-                    // gridから削除（0にする）
-                    grid[p.r][p.c] = 0; 
-                });
-                setTimeout(() => {
-                    balls.forEach(p => p.el.remove());
-                    res();
-                }, 600);
-            });
-        }
-
-        function chain() {
-            processing = true;
-            loop();
-        }
-
-        function loop() {
-            gravity();
-            fill();
-            // ボールの位置を更新・落下アニメーション
-            repos(); 
-            
-            setTimeout(() => {
-                const found = findChains();
-                if (found.length > 0) {
-                    combo++;
-                    score += found.length * 50 * combo;
-                    update();
-                    playVanishSound(); 
-                    vanish(found).then(() => loop());
-                } else {
-                    combo = 0;
-                    processing = false;
-                    update();
-                }
-            }, 550); // 落下アニメーションが終わるのを待つ
-        }
-
-        function gravity() {
-            for (let c = 0; c < COLS; c++) {
-                let w = ROWS - 1; // 書き込み位置
-                for (let r = ROWS - 1; r >= 0; r--) {
-                    if (grid[r][c]) {
-                        if (r !== w) {
-                            grid[w][c] = grid[r][c];
-                            grid[r][c] = 0; // 元の位置は空にする
-                        }
-                        w--;
-                    }
-                }
-            }
-        }
-
-        function fill() {
-            for (let c = 0; c < COLS; c++) {
-                for (let r = 0; r < ROWS; r++) {
-                    // grid[r][c]が0（空）の場合、新しいボールを生成
-                    if (!grid[r][c]) {
-                        grid[r][c] = Math.random() < 0.03 ? RAINBOW_COLOR_ID : Math.floor(Math.random() * COLOR_COUNT) + 1;
-                    }
-                }
-            }
+function vanishBalls(balls) {
+    return new Promise(resolve => {
+        // 消去音
+        if (VANISH_SOUND_ELEMENT && soundEnabled) {
+            VANISH_SOUND_ELEMENT.currentTime = 0;
+            VANISH_SOUND_ELEMENT.volume = 0.5;
+            VANISH_SOUND_ELEMENT.play().catch(error => {});
         }
         
-        // 縦・横・斜めの4つ以上の連鎖を検出する関数
-        function findChains() {
-            const result = [];
-            const seen = new Set();
+        balls.forEach(p => {
+            p.element.classList.add('vanishing');
+        });
+
+        balls.forEach(p => {
+            gameGrid[p.r][p.c] = 0;
+            delete ballElementMap[`${p.r},${p.c}`]; // マップから削除
+        });
+
+        setTimeout(() => {
+            balls.forEach(p => p.element.remove());
+            resolve();
+        }, 450); 
+    });
+}
+
+function startGravityAndChain() {
+    isProcessing = true;
+    checkChainLoop();
+}
+
+function checkChainLoop() {
+    applyGravity();
+    fillEmptySpaces();
+
+    updateBallPositions();
+
+    setTimeout(() => {
+        const chainFound = findAndVanishChains();
+        
+        if (chainFound.length > 0) {
+            comboCount++;
+            // 連鎖ボーナスを緩和: 平方根を使用
+            const chainScore = chainFound.length * 30 * Math.ceil(Math.sqrt(comboCount));
+            score += chainScore;
             
-            // 縦方向の連鎖
-            for (let c = 0; c < COLS; c++) {
-                for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
-                    const col = grid[r][c];
-                    if (!col) continue;
-                    let len = 0;
-                    for (let i = r; i < ROWS && grid[i][c] === col; i++) len++;
-                    if (len >= MIN_CONNECT) {
-                        for (let i = 0; i < len; i++) {
-                            const currentR = r + i;
-                            const k = `${currentR},${c}`;
-                            if (!seen.has(k)) {
-                                const el = document.querySelector(`.ball[data-row="${currentR}"][data-col="${c}"]`);
-                                if (el) result.push({r: currentR, c, el});
-                                seen.add(k);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // 横方向の連鎖
-            for (let r = 0; r < ROWS; r++) {
-                for (let c = 0; c <= COLS - MIN_CONNECT; c++) {
-                    const col = grid[r][c];
-                    if (!col) continue;
-                    let len = 0;
-                    for (let i = c; i < COLS && grid[r][i] === col; i++) len++;
-                    if (len >= MIN_CONNECT) {
-                        for (let i = 0; i < len; i++) {
-                            const currentC = c + i;
-                            const k = `${r},${currentC}`;
-                            if (!seen.has(k)) {
-                                const el = document.querySelector(`.ball[data-row="${r}"][data-col="${currentC}"]`);
-                                if (el) result.push({r, c: currentC, el});
-                                seen.add(k);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // 右下がり斜め ( \ ) の連鎖
-            for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
-                for (let c = 0; c <= COLS - MIN_CONNECT; c++) {
-                    const col = grid[r][c];
-                    if (!col) continue;
-                    let len = 0;
-                    for (let i = 0; r + i < ROWS && c + i < COLS && grid[r + i][c + i] === col; i++) len++;
-                    if (len >= MIN_CONNECT) {
-                        for (let i = 0; i < len; i++) {
-                            const currentR = r + i;
-                            const currentC = c + i;
-                            const k = `${currentR},${currentC}`;
-                            if (!seen.has(k)) {
-                                const el = document.querySelector(`.ball[data-row="${currentR}"][data-col="${currentC}"]`);
-                                if (el) result.push({r: currentR, c: currentC, el});
-                                seen.add(k);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // 右上がり斜め ( / ) の連鎖
-            for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
-                for (let c = MIN_CONNECT - 1; c < COLS; c++) {
-                    const col = grid[r][c];
-                    if (!col) continue;
-                    let len = 0;
-                    for (let i = 0; r + i < ROWS && c - i >= 0 && grid[r + i][c - i] === col; i++) len++;
-                    if (len >= MIN_CONNECT) {
-                        for (let i = 0; i < len; i++) {
-                            const currentR = r + i;
-                            const currentC = c - i;
-                            const k = `${currentR},${currentC}`;
-                            if (!seen.has(k)) {
-                                const el = document.querySelector(`.ball[data-row="${currentR}"][data-col="${currentC}"]`);
-                                if (el) result.push({r: currentR, c: currentC, el});
-                                seen.add(k);
-                            }
-                        }
-                    }
-                }
-            }
+            showComboText(comboCount);
+            updateDisplay();
             
-            // 検出されたボールをgrid上から削除する（vanishと二重にならないよう注意）
-            // 自動連鎖検出では、処理を簡略化するため、ここで見つかったボールをgridから削除（0にする）
-            // gravity関数で空いたマスを詰める処理が機能するようにする
-            result.forEach(p => {
-                grid[p.r][p.c] = 0; 
+            vanishBalls(chainFound).then(() => {
+                checkChainLoop(); 
             });
-
-            return result;
+        } else {
+            comboCount = 0;
+            isProcessing = false;
+            updateDisplay();
         }
+    }, 550); 
+}
 
-        init();
+function applyGravity() {
+    for (let c = 0; c < COLS; c++) {
+        let writeRow = ROWS - 1;
+        for (let r = ROWS - 1; r >= 0; r--) {
+            if (gameGrid[r][c] !== 0) {
+                if (r !== writeRow) {
+                    gameGrid[writeRow][c] = gameGrid[r][c];
+                    gameGrid[r][c] = 0;
+                }
+                writeRow--;
+            }
+        }
+    }
+}
+
+function fillEmptySpaces() {
+    for (let c = 0; c < COLS; c++) {
+        for (let r = 0; r < ROWS; r++) {
+            if (gameGrid[r][c] === 0) {
+                const newColorId = getRandomColorForRefill();
+                gameGrid[r][c] = newColorId;
+            }
+        }
+    }
+}
+
+// ぷよクエ連鎖仕様：縦、横、斜めの4方向の直線で3つ以上を検出
+function findAndVanishChains() {
+    const vanishingBalls = [];
+    const checked = new Set();
+    
+    // 1. 縦方向のチェック
+    for (let c = 0; c < COLS; c++) {
+        for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
+            const color = gameGrid[r][c];
+            if (color === 0) continue;
+            let length = 0;
+            for (let i = r; i < ROWS; i++) {
+                if (gameGrid[i][c] === color) { length++; } else { break; }
+            }
+            if (length >= MIN_CONNECT) {
+                for (let i = 0; i < length; i++) {
+                    const key = `${r + i},${c}`;
+                    if (!checked.has(key)) {
+                        const checkR = r + i;
+                        const element = ballElementMap[key];
+                        if(element) vanishingBalls.push({r: checkR, c, element});
+                        checked.add(key);
+                        gameGrid[checkR][c] = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    // 2. 横方向のチェック
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c <= COLS - MIN_CONNECT; c++) {
+            const color = gameGrid[r][c];
+            if (color === 0) continue;
+            let length = 0;
+            for (let i = c; i < COLS; i++) {
+                if (gameGrid[r][i] === color) { length++; } else { break; }
+            }
+            if (length >= MIN_CONNECT) {
+                for (let i = 0; i < length; i++) {
+                    const key = `${r},${c + i}`;
+                    if (!checked.has(key)) {
+                        const checkC = c + i;
+                        const element = ballElementMap[key];
+                        if(element) vanishingBalls.push({r, c: checkC, element});
+                        checked.add(key);
+                        gameGrid[r][checkC] = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    // 3. 対角線(右下がり: \ )のチェック
+    for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
+        for (let c = 0; c <= COLS - MIN_CONNECT; c++) {
+            const color = gameGrid[r][c];
+            if (color === 0) continue;
+            let length = 0;
+            for (let i = 0; r + i < ROWS && c + i < COLS; i++) {
+                if (gameGrid[r + i][c + i] === color) { length++; } else { break; }
+            }
+            if (length >= MIN_CONNECT) {
+                for (let i = 0; i < length; i++) {
+                    const checkR = r + i;
+                    const checkC = c + i;
+                    const key = `${checkR},${checkC}`;
+                    if (!checked.has(key)) {
+                        const element = ballElementMap[key];
+                        if(element) vanishingBalls.push({r: checkR, c: checkC, element});
+                        checked.add(key);
+                        gameGrid[checkR][checkC] = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    // 4. 対角線(左下がり: / )のチェック
+    for (let r = 0; r <= ROWS - MIN_CONNECT; r++) {
+        for (let c = MIN_CONNECT - 1; c < COLS; c++) { 
+            const color = gameGrid[r][c];
+            if (color === 0) continue;
+            let length = 0;
+            for (let i = 0; r + i < ROWS && c - i >= 0; i++) {
+                if (gameGrid[r + i][c - i] === color) { length++; } else { break; }
+            }
+            if (length >= MIN_CONNECT) {
+                for (let i = 0; i < length; i++) {
+                    const checkR = r + i;
+                    const checkC = c - i;
+                    const key = `${checkR},${checkC}`;
+                    if (!checked.has(key)) {
+                        const element = ballElementMap[key];
+                        if(element) vanishingBalls.push({r: checkR, c: checkC, element});
+                        checked.add(key);
+                        gameGrid[checkR][checkC] = 0;
+                    }
+                }
+            }
+        }
+    }
+    
+    return vanishingBalls;
+}
+
+// --- D. 視覚的フィードバック ---
+
+function showFloatingScore(points, element) {
+    const floatingText = document.createElement('div');
+    floatingText.className = 'floating-score';
+    floatingText.textContent = `+${points}`;
+    
+    const rect = element.getBoundingClientRect();
+    const boardRect = BOARD_ELEMENT.getBoundingClientRect();
+    
+    floatingText.style.left = (rect.left - boardRect.left + rect.width / 2) + 'px';
+    floatingText.style.top = (rect.top - boardRect.top) + 'px';
+    
+    BOARD_ELEMENT.appendChild(floatingText);
+    
+    setTimeout(() => floatingText.remove(), 1000);
+}
+
+function showComboText(combo) {
+    const comboText = document.createElement('div');
+    comboText.className = 'combo-text';
+    comboText.textContent = `${combo} 連鎖!`;
+    
+    comboText.style.left = '50%';
+    comboText.style.top = '50%';
+    
+    BOARD_ELEMENT.appendChild(comboText);
+    
+    setTimeout(() => comboText.remove(), 1500);
+}
     </script>
 </body>
 </html>
